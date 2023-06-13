@@ -1,4 +1,4 @@
-class Api{
+class Api {
 	constructor(config) {
 		this._url = config.url
 		this._headers = config.headers;
@@ -22,17 +22,18 @@ class Api{
 			method: 'POST',
 			headers: this._headers,
 			body: JSON.stringify({
-				name: data.add__title,
-				link: data.add__link
+				name: data.name,
+				link: data.link
 			})
-		}).then(this._checkResponse)
+		})
+			.then(this._checkResponse)
 	}
 
 	getUserDataApi() {
 		return fetch(`${this._url}/users/me`, {
 			headers: this._headers,
 		}).then(this._checkResponse);
-	}	
+	}
 
 	changeUserDataApi(data) {
 		return fetch(`${this._url}/users/me`, {
@@ -62,18 +63,20 @@ class Api{
 		}).then(this._checkResponse);
 	}
 
-	addLikeToCardApi(cardId) {
-		return fetch(`${this._url}/cards/${cardId}/likes`, {
-			method: 'PUT',
-			headers: this._headers
-		}).then(this._checkResponse);
-	}
-
-	removeLikeFromCardApi(cardId) {
-		return fetch(`${this._url}/cards/${cardId}/likes`, {
-			method: 'DELETE',
-			headers: this._headers
-		}).then(this._checkResponse);
+	changeLikeCardStatus(cardId, isCurrentUserLiked) {
+		if (!isCurrentUserLiked) {
+			return fetch(`${this._url}/cards/${cardId}/likes`, {
+				method: 'DELETE',
+				headers: this._headers,
+			})
+				.then(this._checkResponse);
+		} else {
+			return fetch(`${this._url}/cards/${cardId}/likes`, {
+				method: 'PUT',
+				headers: this._headers,
+			})
+				.then(this._checkResponse);
+		}
 	}
 }
 
